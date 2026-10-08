@@ -38,8 +38,11 @@ there are multiple sockets - INTERNET SOCKETS, UNIX SOCKETS, X.25 SOCKETS -- why
 [ETHERNET{ IP [ UDP { UDP [ TFTP { DATA }]}]}]
 how SOCK_DGRAM packets are built --::>>
 
--- packet is born and its wrapped in a header by the first protocol which gets wrapped..... when another host receives it - it starts stripping the layers off -- now the ISO/OSI - it describes a system of network functionality that has many advantages over other models --- wtf ??? 
+-- 
+packet is born and its wrapped in a header by the first protocol which gets wrapped..... when another host receives it - it starts stripping the layers off -- now the ISO/OSI - it describes a system of network functionality that has many advantages over other models --- wtf ???
 --
+
+i can write the programs that are exactly the same without caring out how the data is physically transmitted.so the actual hardware shit is unknown to me always.
 
 
 ## Doubt
