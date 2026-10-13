@@ -8,7 +8,9 @@ Basically everything is unix is a file :p duh - well basically what it means tha
 To get this fd for the connection i am gonna use the socket() system routine -- gives "Socket Descriptor" -- make use of it using things like send() or recv() -- (READ AND WRITE WORKS TOO !)
 
 send--> {when the socket is connected and used to start the transmission from one socket to another socket}
+
 recv --> {to receive message from both connected or not connec. socket. *does not permit the application to retrieve the source address of received data}
+
 connect --> tries to make a connection on a connection-mode socket or set or reset the "other connection-less sockets address"
 
 there are multiple sockets - INTERNET SOCKETS, UNIX SOCKETS, X.25 SOCKETS -- why ignore ??
@@ -32,7 +34,7 @@ there are multiple sockets - INTERNET SOCKETS, UNIX SOCKETS, X.25 SOCKETS -- why
 
 ### for unreliable application ?? - games audio or video - just ignore the dropped packets or compensate for them somehow (accursed lag) 
 
-### 2.4 : why use it ? SPEEEEEEED -- Fire and forget instead of keeping track of what has arrived safely and making sure its in order and all that.
+### 3.4 : why use it ? SPEEEEEEED -- Fire and forget instead of keeping track of what has arrived safely and making sure its in order and all that.
 
 ## DATA ENCAPSULATION 
 [ETHERNET{ IP [ UDP { UDP [ TFTP { DATA }]}]}]
@@ -62,4 +64,9 @@ what the fuck is telnet and what is GET / HTTP/1.0 .. hit enter twice
 fd is just a integer -- the all is file abstraction is from VFS.fd is just a refrence that the os uses to look up the actual object ? -- > so like in case of write(fd) something - the kernel goes the network card driver which will put all of this into the network buffer.                                                 IN CASE OF FD OF DISK :: Points to a data structure that knows how to map the read write requests on a physical storage device.  So basically an integer pointing to the inode or vnode in storage block case ! -- its work is to guide the os to the inode and its done. !
 
 #### 2.3.1A : Basically it has its own layer slapped over udp -- the ack packet -- acknowledgement stuff -- very important during implementation of SOCK_DGRAM.
+
+
+
+
+# PRACTICAL STUFF I GUESS 
 
