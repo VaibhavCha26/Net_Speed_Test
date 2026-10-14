@@ -68,5 +68,46 @@ fd is just a integer -- the all is file abstraction is from VFS.fd is just a ref
 
 
 
+
+
+
 # PRACTICAL STUFF I GUESS 
 
+0. SOCKET()
+  0.1 : A real structure inside the computers ram -- when socket is called - the os allocates a physical chunk of memory to make a "SOCKET DATA STRUCTURE" 
+     --> listening, closed, connected, ip and port number, buffers (for inbox and outbox) 
+
+1. SEND() AND RECV()
+
+  1.1 to measure the wifi data speed i need to send() over and over again -- so basically dump lots of data to the buffer (100mb or smth) as fast as possible (wtf ?).
+    
+      1.1.1 : so when everything is dumped into the buffer the wifi card or mail carrier will take handful of data - make a 'network packet' and then drops them into receivers mailbox.
+      1.1.2 : don't worry about flow and all that - kernel automatically calls wait() and automatically restarts the program so the cpu overhead is 0%
+
+      1.1.3 : so yes it does memory copy -- exactly how ? idk T-T - kernel copies the bytes memory space into the sockets buffer memory space inside the kernel and once its done - change whatever you want;
+
+****
+
+  1.2 Call recv() repeatedly to such that data from the inbox until its all gone ? { sending to a buffer because cpu is too fast for the wifi card } -- then stop the timer. 
+    
+    1.2.1: if inbox is empty the recv() WAITS until the data arrives over the wifi.
+    1.2.2 idiocy : after taking the data from inbox buffer it takes the data to an internal buffer wtf ?
+    1.2.3 : It can't random data floating in the air - it requires a handshake (wtf) 
+      ---> (sender) opens the socket and tells the os that i am going to listen some port.
+      ---> (receivers) call the machine at 1.1.1.1 on that port ?
+    
+    #### some dance called tcp handshake wtf ?
+
+****
+
+2. DOWNLOAD SPEED TEST : 
+  A. send the dummy data (its basically chunk of random memory ) into its buffer and network starts streaming it as fast as it can (where though?). 
+  B. start a stopwatch the exact moment the data lands into the buffer and then loop it until it returns 0 and then stop the timer (do the math and done)
+  B.1 : the data that we get from inbox buffer gets into an internal buffer -- overwrite that as its useless.
+
+### * B.2 : NO MULTIPLE SOCKETS -- single socket - its like a connection not a packet - so stream million gb if you want to.
+  
+  B.3 : HOW to keep each data separate ? 
+      --> THE KERNEL STAMPS IT : so basically it has 4-part address ( called "tuple" ) source ip, source port, destination ip, destination port.
+    
+    B.3.1 : PORT --> basically if there were no ports (its just a stamp on the data at the end of the data everything is done by wifi card) the data of 500 bytes will come but the kernel will have no idea which process needs this or anything. ( JUST A NUMBER )
