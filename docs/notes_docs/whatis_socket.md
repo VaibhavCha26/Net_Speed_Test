@@ -72,10 +72,15 @@ fd is just a integer -- the all is file abstraction is from VFS.fd is just a ref
 
 
 # PRACTICAL STUFF I GUESS 
+00. WIFI_CARD:
+  00.1 : no idea wtf this niga is - it only understands raw packets that is and it does something related to transmission of stuff -- final form.
 
 0. SOCKET()
   0.1 : A real structure inside the computers ram -- when socket is called - the os allocates a physical chunk of memory to make a "SOCKET DATA STRUCTURE" 
-     --> listening, closed, connected, ip and port number, buffers (for inbox and outbox) 
+    ---> listening, closed, connected, ip and port number, buffers (for inbox and outbox) 
+    
+    ---> the socket data structure is stored in Kernel Space RAM;
+  0.2 : Kernel acts as middlemen (constantly checks memory before calling wifi card) - kernel's networking subsystem continuously monitors all active socket data structures. -- when the kernel sees data sitting in sockets outbox it pulls that data out - stamps it and viola - calls the driver -- "send this data bitch"
 
 1. SEND() AND RECV()
 
@@ -85,6 +90,10 @@ fd is just a integer -- the all is file abstraction is from VFS.fd is just a ref
       1.1.2 : don't worry about flow and all that - kernel automatically calls wait() and automatically restarts the program so the cpu overhead is 0%
 
       1.1.3 : so yes it does memory copy -- exactly how ? idk T-T - kernel copies the bytes memory space into the sockets buffer memory space inside the kernel and once its done - change whatever you want;
+         
+        1.1.3.1 : so the buffer (the outputbox buffer) is strictly limited - the point is that send call won't complete until the entire data is copied and sended over the wifi card !! -- so the question that what if i change the memory is not in the buffer is idiotic T-T.
+          
+          1.1.3.1.1 : so there's something like "zero copy" / asynchronous sockets where kernel skips buffer and reads straight from variable (wtf ? -- advanced stuff !! T-T)
 
 ****
 
