@@ -81,6 +81,18 @@ fd is just a integer -- the all is file abstraction is from VFS.fd is just a ref
     
     ---> the socket data structure is stored in Kernel Space RAM;
   0.2 : Kernel acts as middlemen (constantly checks memory before calling wifi card) - kernel's networking subsystem continuously monitors all active socket data structures. -- when the kernel sees data sitting in sockets outbox it pulls that data out - stamps it and viola - calls the driver -- "send this data bitch"
+    
+    0.2.1 : BUFFERS ARE SHOCK ABSORBERS -- the internet is chaotic :O - packets get dropped, wifi stops or something and stuff 
+    -- important: CAN BYPASS IT by disabling the **NAGLE ALGORITHM** (TCP_NODELAY) ---
+      
+      A. kernel operates on NAGLE ALGORITHM
+
+
+
+
+
+
+
 
 1. SEND() AND RECV()
 
@@ -94,8 +106,11 @@ fd is just a integer -- the all is file abstraction is from VFS.fd is just a ref
         1.1.3.1 : so the buffer (the outputbox buffer) is strictly limited - the point is that send call won't complete until the entire data is copied and sended over the wifi card !! -- so the question that what if i change the memory is not in the buffer is idiotic T-T.
           
           1.1.3.1.1 : so there's something like "zero copy" / asynchronous sockets where kernel skips buffer and reads straight from variable (wtf ? -- advanced stuff !! T-T)
-
+          
+          1.1.3.1.2 : so in single threaded program it is impossible because my program stops when send() call is running. However in multi threaded program it is possible that thread a calls send and thread b forcefully overwrites the contents of the buffer.
 ****
+
+
 
   1.2 Call recv() repeatedly to such that data from the inbox until its all gone ? { sending to a buffer because cpu is too fast for the wifi card } -- then stop the timer. 
     
@@ -105,9 +120,13 @@ fd is just a integer -- the all is file abstraction is from VFS.fd is just a ref
       ---> (sender) opens the socket and tells the os that i am going to listen some port.
       ---> (receivers) call the machine at 1.1.1.1 on that port ?
     
-    #### some dance called tcp handshake wtf ?
+#### some dance called tcp handshake wtf ?
+    1.2.4 in case of other machines it works exactly the smae xP thanks to global routing ? - does syn -ack 3 way handshake and then virtual pipe is intialized 
+      1.2.4.1 : once the handshake is done both os have matching socket structures in their respective kernels - pipe is "just an agreement between kernel to talk to each other"
 
 ****
+
+
 
 2. DOWNLOAD SPEED TEST : 
   A. send the dummy data (its basically chunk of random memory ) into its buffer and network starts streaming it as fast as it can (where though?). 
