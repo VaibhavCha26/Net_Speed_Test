@@ -8,42 +8,45 @@
 #define ROOT 0
 
 
-/* sockets*/
-typedef enum usr_sockets{
+/* escalation options and their available sockets for calling basically */
+typedef enum sockets_options{
   usr_exp
-}usr_sockets;
+}socket_options;
 
-typedef enum root_sockets{
-  root_exp
-}root_sockets;
-
-// here 
-struct usr_exp{};
+// here we define the sockets individually.
+struct usr_exp{
+  
+};
 struct root_exp{};
 
 /* Definitions */ 
 typedef struct socket_calls{
-
+  //enum sockets_options sockets_available;
+  int escalation;
+  int fd;
   union {
     struct usr_exp usr_exp;
     struct root_exp root_exp;
   }data;
 
-}read_struct;
+}socket_calls;
+
+
 
 struct socket_calls socket_calling(int argc,char* argv[]){
-  enum usr_sockets usr;
-  enum root_sockets root;
+  enum sockets_options sockets_available;
 
   switch (*argv[1]) {
     case ROOT : 
-      return (struct usr_sockets_called{});
+      return (struct socket_calls){
+        .escalation = 1
+      };
     
     case USR : 
-      return (struct root_sockets_called);
+      return (struct socket_calls){};
     
 
-    default : break;
+    default : break; // change this later;
   };
 };
 
