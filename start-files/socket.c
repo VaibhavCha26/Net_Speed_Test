@@ -63,8 +63,9 @@ int main(int argc,char* argv[]){
 
 }
 
-void socket_handling(){
-  int socket_called = socket(SOCK_STREAM,)
+void socket_handling(domain){
+  int socket_called = socket(,);
+
 }
 
 void data_handling(char* file,int flags,char* buffer)
