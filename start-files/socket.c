@@ -8,6 +8,7 @@
 #define USR 1
 #define ROOT 0
 
+void socket_handling();
 void data_handling(char* file,int flags,char* buffer);
 
 /* escalation options and their available sockets for calling basically */
@@ -60,8 +61,10 @@ int main(int argc,char* argv[]){
   }
 
 
+}
 
-
+void socket_handling(){
+  int socket_called = socket(SOCK_STREAM,)
 }
 
 void data_handling(char* file,int flags,char* buffer)
