@@ -2,11 +2,13 @@
 #include <stdlib.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <fcntl.h>
 
 /* macros */ 
 #define USR 1
 #define ROOT 0
 
+void data_handling(char* file,int flags,char* buffer);
 
 /* escalation options and their available sockets for calling basically */
 typedef enum sockets_options{
@@ -15,7 +17,7 @@ typedef enum sockets_options{
 
 // here we define the sockets individually.
 struct usr_exp{
-  
+  char usr_exp_buffer[1024*32]; 
 };
 struct root_exp{};
 
@@ -50,5 +52,44 @@ struct socket_calls socket_calling(int argc,char* argv[]){
   };
 };
 
+// ex --> [name] usr video file location
 int main(int argc,char* argv[]){
+  switch(argc){
+    case 5 : break;
+    default : perror("Missed something - refer to docs: "); exit(1);
+  }
+
+
+
+
+}
+
+void data_handling(char* file,int flags,char* buffer)
+{
+  if(file == NULL){
+    perror("location not defined");
+    exit(1);
+  }
+
+  int file_fd = open(file,flags);
+  if(file_fd == -1){
+    perror("opening error");
+    exit(1);
+  }
+
+  ssize_t size_read = 0;
+  ssize_t total_read = 0;
+
+  if( (size_read = read(file_fd,
+                        buffer,sizeof(buffer) - 1 )) > 0 ) {
+    total_read += size_read;
+  }
+  else {
+    if(total_read > sizeof(buffer - 1)){
+      // debug info T-T 
+      buffer[sizeof(buffer)] = '\0';
+      total_read = 0;
+    }
+    buffer[total_read] = '\0';
+  }
 }
