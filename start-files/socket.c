@@ -8,67 +8,120 @@
 #define USR 1
 #define ROOT 0
 
-void socket_handling();
-void data_handling(char* file,int flags,char* buffer);
-
 /* escalation options and their available sockets for calling basically */
-typedef enum sockets_options{
+typedef enum usr_sockets_options{
   usr_exp
 }socket_options;
+
+typedef enum root_sockets_options{
+  root_exp
+}root_sockets_options;
+
 
 // here we define the sockets individually.
 struct usr_exp{
   char usr_exp_buffer[1024*32]; 
 };
-struct root_exp{};
 
-/* Definitions */ 
-typedef struct socket_calls{
-  //enum sockets_options sockets_available;
-  int escalation;
-  int fd;
-  union {
-    struct usr_exp usr_exp;
-    struct root_exp root_exp;
-  }data;
-
-}socket_calls;
-
-
-
-struct socket_calls socket_calling(int argc,char* argv[]){
-  enum sockets_options sockets_available;
-
-  switch (*argv[1]) {
-    case ROOT : 
-      return (struct socket_calls){
-        .escalation = 1
-      };
-    
-    case USR : 
-      return (struct socket_calls){};
-    
-
-    default : break; // change this later;
-  };
+struct root_exp{
+  char root_exp_buffer[1024*36];
 };
 
-// ex --> [name] usr video file location
+
+/* Definitions */ 
+typedef struct socket_metadata{
+  //enum sockets_options sockets_available;
+  int escalation;
+  void* file_location;
+  int socket_type;
+}socket_metadata;
+
+
+
+//struct socket_calls socket_calling(char* argv[], int* data_fd){
+//  enum sockets_options sockets_available;
+// switch (*argv[1]) { case ROOT : 
+//      return (struct socket_calls){
+//        .escalation =  0,
+//        .fd = *data_fd,
+//      };
+//    
+//    case USR : 
+//      return (struct socket_calls){
+//        .escalation = 1,
+//        .fd = *data_fd,
+//
+//};
+//    
+//
+//    default : break; // change this later;
+//  };
+//};
+
+int socket_handling(struct socket_metadata);
+int data_handling(char* file,int flags,char* buffer);
+
+
+
+
+// ex --> [name] esc socket_type file_location
 int main(int argc,char* argv[]){
+  struct socket_metadata curr_sock_meta;
+
+  curr_sock_meta.file_location = argv[3];
+  curr_sock_meta.escalation = *argv[1];
+  curr_sock_meta.socket_type = *argv[2];
+
   switch(argc){
     case 5 : break;
     default : perror("Missed something - refer to docs: "); exit(1);
   }
+  
 
-
-}
-
-void socket_handling(domain){
-  int socket_called = socket(,);
+  socket_handling(curr_sock_meta);
 
 }
 
-void data_handling(char* file,int flags,char* buffer)
+
+
+int socket_handling(struct socket_metadata curr_sock_meta){
+  switch (curr_sock_meta.escalation) {
+    case 0 : {
+
+      switch (curr_sock_meta.socket_type) {
+
+        case 0 : {
+          struct usr_exp usr_exp;
+        }
+
+        default : exit(1);
+      }
+      
+    }
+
+
+    case 1 : {
+
+      switch (curr_sock_meta.socket_type) {
+
+        case 0 : {
+          struct root_exp root_exp;
+        }
+
+        default : exit(1);
+      }
+    }
+
+    default : exit(1); // later bruh
+  }
+
+
+  return 0;
+}
+
+
+
+int data_handling(char* file,int flags,char* buffer)
 {
   if(file == NULL){
     perror("location not defined");
